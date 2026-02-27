@@ -1,0 +1,92 @@
+<resources>
+    <string name="app_name">Grocery &amp; Budget</string>
+
+    <!-- Main -->
+    <string name="total_budget">Total Budget</string>
+    <string name="remaining">Remaining</string>
+    <string name="my_grocery_list">My Grocery List</string>
+    <string name="empty_list_title">No items yet</string>
+    <string name="empty_list_subtitle">Tap + to add your first grocery item</string>
+    <string name="add_item">Add item</string>
+    <string name="set_budget">Set budget</string>
+    <string name="budget_warning_message">Budget warning: Less than 20%% remaining (PKR %d)</string>
+    <string name="currency_format">PKR %s</string>
+
+    <!-- Add Item -->
+    <string name="add_new_item">Add new item</string>
+    <string name="item_name">Item name</string>
+    <string name="item_price">Price (PKR)</string>
+    <string name="save_item">Save item</string>
+    <string name="hint_item_name">e.g. Milk, Bread</string>
+    <string name="hint_item_price">0</string>
+    <string name="error_name_required">Enter item name</string>
+    <string name="error_price_invalid">Enter a valid price</string>
+
+    <!-- Budget -->
+    <string name="set_total_budget">Set total budget</string>
+    <string name="enter_budget">Enter total budget (PKR)</string>
+    <string name="save_budget">Save budget</string>
+    <string name="hint_budget">e.g. 5000</string>
+    <string name="delete_item">Remove item</string>
+    <string name="edit_item">Edit item</string>
+    <string name="quantity">Quantity</string>
+    <string name="hint_quantity">1</string>
+    <string name="payment_mode">Payment mode</string>
+    <string name="unit_price">Unit price: PKR %s</string>
+    <string name="total_cost">Total: PKR %s</string>
+    <string name="error_quantity_invalid">Enter valid quantity</string>
+    <string name="reports_and_insights">Reports &amp; Insights</string>
+    <string name="spending_summary">Spending summary</string>
+    <string name="total_spent">Total spent</string>
+    <string name="by_payment_mode">By payment mode</string>
+    <string name="weekly_view">Weekly</string>
+    <string name="monthly_view">Monthly</string>
+    <string name="no_data_yet">Add items to see reports</string>
+    <string name="login">Login</string>
+    <string name="register">Register</string>
+    <string name="login_subtitle">Sign in to manage your grocery budget</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="name">Name</string>
+    <string name="create_account">Create account</string>
+    <string name="error_invalid_login">Invalid email or password</string>
+    <string name="error_fill_all">Please fill all fields</string>
+    <string name="logout">Logout</string>
+    <string name="expense_summary">Expense summary</string>
+    <string name="budget_exceeded_title">Budget exceeded</string>
+    <string name="budget_exceeded_message">You have exceeded your budget by PKR %s. Consider adjusting your spending or budget.</string>
+    <string name="delete_confirm_title">Remove item?</string>
+    <string name="delete_confirm_message">Remove \"%s\" from your list? This cannot be undone.</string>
+    <string name="cancel">Cancel</string>
+    <string name="remove">Remove</string>
+    <string name="sort_by">Sort by</string>
+    <string name="sort_by_name">Name (A–Z)</string>
+    <string name="sort_by_price">Price (low to high)</string>
+    <string name="sort_by_price_high">Price (high to low)</string>
+    <string name="sort_by_date">Date added</string>
+    <string name="search_hint">Search items…</string>
+    <string name="items_count">%d items · PKR %s spent</string>
+    <string name="category">Category</string>
+    <string name="alert_75_title">Budget warning (75%%)</string>
+    <string name="alert_75_message">You have used 75%% of your budget. PKR %s remaining.</string>
+    <string name="alert_90_title">Critical budget alert (90%%)</string>
+    <string name="alert_90_message">You have used 90%% of your budget. Only PKR %s left.</string>
+    <string name="notification_exceeded_title">Budget exceeded</string>
+    <string name="notification_exceeded_text">You have exceeded your budget by PKR %s.</string>
+    <string name="export_report">Export report</string>
+    <string name="export_csv">Export as CSV</string>
+    <string name="export_pdf">Export as PDF</string>
+    <string name="share_report">Share report</string>
+    <string name="monthly_comparison">Monthly comparison</string>
+    <string name="this_month">This month</string>
+    <string name="last_month">Last month</string>
+    <string name="change">Change</string>
+    <string name="expense_prediction">Expense prediction</string>
+    <string name="predicted_spending">Predicted spending (avg)</string>
+    <string name="estimated_remaining">Estimated remaining</string>
+    <string name="spending_habits">Spending habits</string>
+    <string name="most_spent_category">You spend most on: %s</string>
+    <string name="most_used_payment">Most used payment: %s</string>
+    <string name="unit_price_tip">Tip: %s is cheaper per unit (PKR %s/unit)</string>
+    <string name="by_category">By category</string>
+</resources>

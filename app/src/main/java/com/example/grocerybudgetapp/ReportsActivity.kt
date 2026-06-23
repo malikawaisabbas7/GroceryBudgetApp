@@ -1,5 +1,6 @@
 package com.example.grocerybudgetapp
 
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
@@ -9,6 +10,7 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.example.grocerybudgetapp.storage.StorageService
@@ -24,17 +26,23 @@ import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
+import com.example.grocerybudgetapp.auth.AuthManager
+import com.example.grocerybudgetapp.util.DateUtils
+import java.io.FileOutputStream
 
 class ReportsActivity : AppCompatActivity() {
 
+    private var totalBudget: Double = 0.0
     private lateinit var storage: StorageService
     private var list = listOf<GroceryItem>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_reports)
-        storage = StorageService(this)
+        val email = AuthManager.getCurrentUserEmail(this)
+        storage = StorageService(this, email)
         list = storage.getGroceryList()
+        totalBudget = getCurrentBudget().toDouble()
 
         setSupportActionBar(findViewById(R.id.toolbar))
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -42,9 +50,10 @@ class ReportsActivity : AppCompatActivity() {
             .setNavigationOnClickListener { onBackPressedDispatcher.onBackPressed() }
 
         val totalSpent = list.sumOf { it.price }
-        val totalBudget = storage.getTotalBudget()
+        val budget = getCurrentBudget()
         findViewById<TextView>(R.id.tvTotalSpent).text = getString(R.string.currency_format, "%,d".format(totalSpent.toInt()))
-        findViewById<TextView>(R.id.tvTotalBudgetReport).text = getString(R.string.currency_format, "%,d".format(totalBudget.toInt()))
+        findViewById<TextView>(R.id.tvTotalBudgetReport)
+            .text = getString(R.string.currency_format, "%,d".format(budget.toInt()))
 
         val containerByMode = findViewById<LinearLayout>(R.id.containerByPaymentMode)
         val containerByCategory = findViewById<LinearLayout>(R.id.containerByCategory)
@@ -105,7 +114,7 @@ class ReportsActivity : AppCompatActivity() {
                 list.filter { inRange(it.addedAt, start, end) }.sumOf { it.price }
             }
             val avgSpending = monthlyTotals.filter { it > 0 }.let { if (it.isEmpty()) 0.0 else it.average() }
-            val estimatedRemaining = totalBudget - avgSpending
+            val estimatedRemaining = (totalBudget - avgSpending).coerceAtLeast(0.0)
             findViewById<TextView>(R.id.tvPrediction).text = getString(R.string.predicted_spending) + ": PKR " + "%,d".format(avgSpending.toInt()) + "\n" +
                 getString(R.string.estimated_remaining) + ": PKR " + "%,d".format(estimatedRemaining.toInt())
 
@@ -118,99 +127,20 @@ class ReportsActivity : AppCompatActivity() {
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.menu_reports, menu)
-        return true
-    }
+    private fun getCurrentBudget(): Float {
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.action_export) {
-            showExportOptions()
-            return true
+        val sharedPref = getSharedPreferences("BUDGET_DATA", MODE_PRIVATE)
+
+        val month = sharedPref.getString("last_month", null)
+        val year = sharedPref.getString("last_year", null)
+
+        return if (month != null && year != null) {
+            val key = "budget_${month}_${year}"
+            sharedPref.getFloat(key, 0f)
+        } else {
+            0f
         }
-        return super.onOptionsItemSelected(item)
     }
-
-    private fun showExportOptions() {
-        val options = arrayOf(getString(R.string.export_csv), getString(R.string.export_pdf), getString(R.string.share_report))
-        AlertDialog.Builder(this)
-            .setTitle(R.string.export_report)
-            .setItems(options) { _, which ->
-                when (which) {
-                    0 -> exportCsv()
-                    1 -> exportPdf()
-                    2 -> shareReport()
-                }
-            }
-            .show()
-    }
-
-    private fun getReportCsvContent(): String {
-        val header = "Name,Price,Quantity,Unit Price,Category,Payment Mode,Date\n"
-        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-        val rows = list.joinToString("\n") { item ->
-            "${item.name},${item.price},${item.quantity},${item.unitPrice},${item.category},${item.paymentMode},${dateFormat.format(item.addedAt)}"
-        }
-        return header + rows + "\n\nTotal Spent," + list.sumOf { it.price } + ",,,,,\n"
-    }
-
-    private fun exportCsv() {
-        val content = getReportCsvContent()
-        val file = File(cacheDir, "grocery_report_${System.currentTimeMillis()}.csv")
-        file.writeText(content)
-        val uri = androidx.core.content.FileProvider.getUriForFile(this, "${packageName}.fileprovider", file)
-        startActivity(Intent(Intent.ACTION_SEND).apply {
-            type = "text/csv"
-            putExtra(Intent.EXTRA_STREAM, uri)
-            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-        })
-    }
-
-    private fun exportPdf() {
-        val file = File(cacheDir, "grocery_report_${System.currentTimeMillis()}.pdf")
-        val doc = android.graphics.pdf.PdfDocument()
-        try {
-            val pageInfo = android.graphics.pdf.PdfDocument.PageInfo.Builder(300, 400, 1).create()
-            val page = doc.startPage(pageInfo)
-            val paint = android.graphics.Paint().apply { textSize = 10f }
-
-            var y = 20f
-            getReportCsvContent().lines().take(40).forEach { line ->
-                page.canvas.drawText(line, 20f, y, paint)
-                y += 12f
-            }
-
-            doc.finishPage(page)
-
-            java.io.FileOutputStream(file).use { output ->
-                doc.writeTo(output)
-            }
-        } finally {
-            doc.close() // Always close the document
-        }
-
-        val uri = androidx.core.content.FileProvider.getUriForFile(
-            this,
-            "${packageName}.fileprovider",
-            file
-        )
-
-        startActivity(Intent(Intent.ACTION_SEND).apply {
-            type = "application/pdf"
-            putExtra(Intent.EXTRA_STREAM, uri)
-            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-        })
-    }
-
-    private fun shareReport() {
-        val content = getReportCsvContent()
-        startActivity(Intent(Intent.ACTION_SEND).apply {
-            type = "text/plain"
-            putExtra(Intent.EXTRA_SUBJECT, getString(R.string.expense_summary))
-            putExtra(Intent.EXTRA_TEXT, content)
-        })
-    }
-
     private fun getMonthStartMillis(cal: Calendar, monthsAgo: Int): Long {
         val c = cal.clone() as Calendar
         c.add(Calendar.MONTH, -monthsAgo)
@@ -285,4 +215,40 @@ class ReportsActivity : AppCompatActivity() {
         chart.setFitBars(true)
         chart.invalidate()
     }
+    private fun getFormattedData(list: List<GroceryItem>): List<List<String>> {
+
+        val data = mutableListOf<List<String>>()
+
+        // HEADER (same as PDF)
+        data.add(
+            listOf(
+                "Name",
+                "Category",
+                "Qty",
+                "Unit Price",
+                "Total Price",
+                "Payment",
+                "Date"
+            )
+        )
+
+        // ROWS
+        list.forEach { item ->
+
+            data.add(
+                listOf(
+                    item.name,
+                    item.category,
+                    "%.0f".format(item.quantity),
+                    "%.2f".format(item.price / item.quantity),
+                    "%.2f".format(item.price),
+                    item.paymentMode,
+                    DateUtils.formatDate(item.addedAt)
+                )
+            )
+        }
+
+        return data
+    }
+
 }

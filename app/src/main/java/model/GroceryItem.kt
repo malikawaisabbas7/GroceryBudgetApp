@@ -38,5 +38,4 @@ object ItemCategory {
     const val BEVERAGES = "Beverages"
     const val HOUSEHOLD = "Household"
     const val PERSONAL_CARE = "Personal care"
-    val ALL = listOf(FOOD, BEVERAGES, HOUSEHOLD, PERSONAL_CARE)
 }

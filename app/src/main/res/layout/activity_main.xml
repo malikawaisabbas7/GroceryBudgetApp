@@ -7,199 +7,165 @@
     android:background="@color/background"
     android:fitsSystemWindows="true">
 
+    <!-- MAIN CONTENT -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <!-- Toolbar -->
+        <!-- TOOLBAR -->
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="@color/primary"
-            android:elevation="4dp"
             app:title="@string/my_grocery_list"
-            app:titleTextColor="@color/white" />
+            app:titleTextColor="@color/white"/>
 
-        <ScrollView
+        <!-- BUDGET CARD -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/budgetCard"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:fillViewport="true"
-            android:scrollbars="none">
+            android:layout_height="wrap_content"
+            android:layout_margin="12dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="6dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="@dimen/spacing_md">
-
-                <!-- Budget summary card -->
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/budgetCard"
-                    android:layout_width="match_parent"
+                android:padding="16dp"
+                android:background="@drawable/bg_budget_card">
+                <TextView
+                    android:id="@+id/tvMonthYear"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/spacing_lg"
-                    app:cardCornerRadius="@dimen/card_corner_radius"
-                    app:cardElevation="@dimen/card_elevation"
-                    app:strokeWidth="0dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:padding="@dimen/spacing_lg"
-                        android:background="@drawable/bg_budget_card">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/total_budget"
-                            android:textColor="#B2DFDB"
-                            android:textSize="@dimen/text_caption"
-                            android:textAllCaps="true"
-                            android:letterSpacing="0.05" />
-
-                        <TextView
-                            android:id="@+id/totalBudget"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/spacing_xs"
-                            android:textColor="@color/white"
-                            android:textSize="28sp"
-                            android:textStyle="bold" />
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:layout_marginVertical="@dimen/spacing_md"
-                            android:background="#40FFFFFF" />
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:gravity="center_vertical">
-
-                            <TextView
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:text="@string/remaining"
-                                android:textColor="#B2DFDB"
-                                android:textSize="@dimen/text_body" />
-
-                            <TextView
-                                android:id="@+id/remainingBudget"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textColor="@color/white"
-                                android:textSize="@dimen/text_headline"
-                                android:textStyle="bold" />
-                        </LinearLayout>
-
-                        <com.google.android.material.progressindicator.LinearProgressIndicator
-                            android:id="@+id/budgetProgressBar"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/spacing_md"
-                            app:trackCornerRadius="4dp"
-                            app:trackThickness="8dp"
-                            app:indicatorColor="@color/white"
-                            app:trackColor="#40FFFFFF" />
-
-                        <TextView
-                            android:id="@+id/tvStats"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/spacing_sm"
-                            android:textColor="#B2DFDB"
-                            android:textSize="@dimen/text_small" />
-                    </LinearLayout>
-                </com.google.android.material.card.MaterialCardView>
-
-                <!-- Section label -->
+                    android:text="Month Year"
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:layout_marginTop="10dp"
+                    android:textColor="@color/black"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/spacing_sm"
-                    android:text="@string/my_grocery_list"
-                    android:textColor="@color/text_secondary"
-                    android:textSize="@dimen/text_caption"
-                    android:textAllCaps="true"
-                    android:letterSpacing="0.08" />
+                    android:text="TOTAL BUDGET"
+                    android:textColor="#B2DFDB"
+                    android:textSize="12sp"
+                    android:textStyle="bold"/>
 
-                <!-- Empty state -->
-                <LinearLayout
-                    android:id="@+id/emptyState"
+
+                <TextView
+                    android:id="@+id/totalBudget"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:textSize="26sp"
+                    android:textStyle="bold"
+                    android:layout_marginTop="4dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="REMAINING"
+                    android:textColor="#B2DFDB"
+                    android:textSize="12sp"
+                    android:layout_marginTop="10dp"/>
+
+                <TextView
+                    android:id="@+id/remainingBudget"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:textSize="20sp"
+                    android:textStyle="bold"/>
+
+                <com.google.android.material.progressindicator.LinearProgressIndicator
+                    android:id="@+id/budgetProgressBar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:gravity="center"
-                    android:padding="@dimen/spacing_xl"
-                    android:visibility="gone">
+                    android:layout_marginTop="10dp"
+                    app:trackThickness="8dp"
+                    app:trackCornerRadius="4dp"
+                    app:indicatorColor="@color/white"
+                    app:trackColor="#33FFFFFF"/>
 
-                    <ImageView
-                        android:layout_width="96dp"
-                        android:layout_height="96dp"
-                        android:src="@drawable/ic_basket"
-                        android:alpha="0.4"
-                        android:contentDescription="@null" />
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/spacing_md"
-                        android:text="@string/empty_list_title"
-                        android:textColor="@color/text_primary"
-                        android:textSize="@dimen/text_headline"
-                        android:textStyle="bold" />
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/spacing_xs"
-                        android:text="@string/empty_list_subtitle"
-                        android:textColor="@color/text_hint"
-                        android:textSize="@dimen/text_caption" />
-                </LinearLayout>
-
-                <!-- Grocery list -->
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recyclerView"
-                    android:layout_width="match_parent"
+                <TextView
+                    android:id="@+id/txtWarning"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:nestedScrollingEnabled="false"
-                    android:clipToPadding="false"
-                    android:paddingBottom="80dp" />
+                    android:text=""
+                    android:textColor="#FF5252"
+                    android:textStyle="bold"/>
             </LinearLayout>
-        </ScrollView>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- EMPTY STATE -->
+        <LinearLayout
+            android:id="@+id/emptyState"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:visibility="gone"
+            android:padding="20dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="No items found"
+                android:textSize="16sp"/>
+        </LinearLayout>
+
+        <!-- ✅ FIXED RECYCLER VIEW (IMPORTANT CHANGE) -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:nestedScrollingEnabled="true"/>
     </LinearLayout>
 
-    <!-- FABs -->
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fabAdd"
+    <!-- FAB CONTAINER -->
+    <LinearLayout
+        android:id="@+id/fabContainer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/spacing_md"
-        android:contentDescription="@string/add_item"
-        app:srcCompat="@android:drawable/ic_input_add"
-        app:tint="@color/white"
-        app:backgroundTint="@color/primary"
-        app:elevation="6dp"
-        app:fabSize="normal" />
+        android:layout_margin="16dp"
+        android:orientation="vertical">
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fabBudget"
-        android:layout_width="wrap_content"
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabBudget"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="20dp"
+            android:src="@drawable/outline_attach_money_24"
+            app:backgroundTint="@color/secondary"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="10dp"/>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabAdd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="80dp"
+            android:src="@android:drawable/ic_input_add"
+            app:backgroundTint="@color/primary"/>
+    </LinearLayout>
+
+    <!-- BOTTOM NAV -->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNav"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_marginEnd="@dimen/spacing_md"
-        android:layout_marginBottom="88dp"
-        android:contentDescription="@string/set_budget"
-        app:srcCompat="@android:drawable/ic_menu_edit"
-        app:tint="@color/white"
-        app:backgroundTint="@color/secondary"
-        app:elevation="6dp"
-        app:fabSize="mini" />
+        android:layout_gravity="bottom"
+        android:background="@color/primary"
+        app:menu="@menu/bottom_nav_menu"/>
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
